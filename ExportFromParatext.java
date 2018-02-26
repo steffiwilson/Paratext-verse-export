@@ -1,6 +1,7 @@
 import java.io.File;
+import java.util.Scanner;
 
-public class ReturnFileName {
+public class ExportFromParatext {
 
     public static void main(String[] args) {
         for(int i=0; i < args.length; i++) {
@@ -287,8 +288,49 @@ public class ReturnFileName {
 				File expectedFile = new File(installPath + projectName + "/" + fileName);
 				boolean fileExists = expectedFile.exists();
 				
+				//walk through the file
+				if (fileExists) {
+					System.out.println("About to try to open the file...");
+					try {
+						Scanner scanner = new Scanner(expectedFile);
+						String currentLine;
+						boolean foundChapter = false;
+						boolean foundVerse = false;
+						boolean foundMarkupTag = false;
+						String currentTag = "";
+						
+						int lineNumber = 0; //for testing
+						
+						while (scanner.hasNextLine()) {
+							currentLine = scanner.nextLine();
+							lineNumber += 1;
+							System.out.println(lineNumber + ": " + currentLine); //This output proves the Scanner is ending too soon right now
+							
+							if (currentLine == "\\c " + chapterNumber)
+								System.out.println("Found the chapter tag at line " + lineNumber);
+							
+							/*
+							for (int i = 0; i < currentLine.length(); i++) {
+								if (foundMarkupTag && !foundChapter) {
+									
+								}
+								else {
+									if (currentLine.charAt(i) == '\')
+										foundMarkupTag = true;
+									else {
+									}	
+								}
+							}
+							*/
+						}// end while scanner has next line
+					}
+					catch (Exception e) {
+						System.out.println("\nCould not find that file!");
+					}
+				} //end if file exists
+				
 				//print the parsed reference for troubleshooting
-				System.out.println("Book name: " + bookName + 
+				System.out.println("\nBook name: " + bookName + 
 								 "\nBook abbreviation: " + bookAbbreviation + 
 								 "\nChapter: " + chapterNumber + 
 								 "\nBeginning verse: " + beginningVerse + 
