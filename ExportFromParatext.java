@@ -2,10 +2,8 @@ import java.io.File;
 import java.util.Scanner;
 
 public class ExportFromParatext {
-
     public static void main(String[] args) {
-        for(int i=0; i < args.length; i++) {
-			
+        for(int i=0; i < args.length; i++) {		
 			String reference = "";
 			String bookName = "";
 			String bookAbbreviation = "";
@@ -28,10 +26,8 @@ public class ExportFromParatext {
 				//get the book name
 				if (!finishedBookName) {
 					if (reference.charAt(j) == ' ' 
-							&& !bookName.equals("Song") //TODO: also add condition for "Song 1:1" etc
-							&& !bookName.equals("song") 
-							&& !bookName.equals("Song of")
-							&& !bookName.equals("song of")
+							&& !bookName.toUpperCase().equals("SONG") //TODO: also add condition for "Song 1:1" etc
+							&& !bookName.toUpperCase().equals("SONG OF")
 							&& !bookName.equals("1") 
 							&& !bookName.equals("2") 
 							&& !bookName.equals("1st") 
@@ -68,7 +64,7 @@ public class ExportFromParatext {
 			
 			validReference = !(bookName == null || chapterNumber == null || beginningVerse == null);
 			
-			//map the book name to the abbreviation
+			//map the book name to the abbreviation - these abbreviations and numbering are the Paratext standard
 			switch (bookName.toUpperCase()) {
 				/* Old Testament */
 				case "GEN": bookAbbreviation = "GEN"; bookNumber = "01"; break;
@@ -290,7 +286,6 @@ public class ExportFromParatext {
 				
 				//walk through the file
 				if (fileExists) {
-					System.out.println("About to try to open the file...");
 					try {
 						Scanner scanner = new Scanner(expectedFile);
 						String currentLine;
@@ -306,7 +301,7 @@ public class ExportFromParatext {
 							lineNumber += 1;
 							System.out.println(lineNumber + ": " + currentLine); //This output proves the Scanner is ending too soon right now
 							
-							if (currentLine == "\\c " + chapterNumber)
+							if (currentLine.equals("\\c " + chapterNumber))
 								System.out.println("Found the chapter tag at line " + lineNumber);
 							
 							/*
