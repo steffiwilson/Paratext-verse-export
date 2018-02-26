@@ -287,7 +287,7 @@ public class ExportFromParatext {
 				//walk through the file
 				if (fileExists) {
 					try {
-						Scanner scanner = new Scanner(expectedFile);
+						Scanner scanner = new Scanner(expectedFile, "UTF-8");
 						String currentLine;
 						boolean foundChapter = false;
 						boolean foundVerse = false;
@@ -299,7 +299,6 @@ public class ExportFromParatext {
 						while (scanner.hasNextLine()) {
 							currentLine = scanner.nextLine();
 							lineNumber += 1;
-							System.out.println(lineNumber + ": " + currentLine); //This output proves the Scanner is ending too soon right now
 							
 							if (currentLine.equals("\\c " + chapterNumber))
 								System.out.println("Found the chapter tag at line " + lineNumber);
