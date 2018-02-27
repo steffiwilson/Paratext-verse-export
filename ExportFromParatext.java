@@ -15,6 +15,7 @@ public class ExportFromParatext {
 			boolean finishedChapter = false;
 			boolean foundDash = false;
 			boolean validReference = true;
+			String invalidReason = "";
 			String projectName = "MP1"; //todo: Move to a config file
 			String fileName = "";
 			String installPath = "C:\\My Paratext 8 Projects\\"; //todo: move to a config file
@@ -63,6 +64,12 @@ public class ExportFromParatext {
 				endingVerse = beginningVerse;
 			
 			validReference = !(bookName == null || chapterNumber == null || beginningVerse == null);
+			if (bookName == null)
+				invalidReason += "Unable to identify book. ";
+			if (chapterNumber == null) 
+				invalidReason += "Unable to identify chapter number. ";
+			if (beginningVerse == null) 
+				invalidReason += "Unable to identify verse. ";
 			
 			//map the book name to the abbreviation - these abbreviations and numbering are the Paratext standard
 			switch (bookName.toUpperCase()) {
@@ -271,14 +278,153 @@ public class ExportFromParatext {
 				case "REVELATIONS": bookAbbreviation = "REV"; bookNumber = "67"; break;
 				case "REVEL": bookAbbreviation = "REV"; bookNumber = "67"; break;
 					 
-				default: validReference = false;
+				default: validReference = false; invalidReason += "Unable to map book name to its abbreviation. ";
 						 break;
 			}
 			
 			//todo: build list of the number of chapters in each book and check that the parsed chapter exists in the book
 			
+			switch (bookAbbreviation) {
+				case "GEN": validReference = !(Integer.parseInt(chapterNumber) > 50); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "EXO": validReference = !(Integer.parseInt(chapterNumber) > 40); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "LEV": validReference = !(Integer.parseInt(chapterNumber) > 27); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "NUM": validReference = !(Integer.parseInt(chapterNumber) > 36); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "DEU": validReference = !(Integer.parseInt(chapterNumber) > 34); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "JOS": validReference = !(Integer.parseInt(chapterNumber) > 24); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "JDG": validReference = !(Integer.parseInt(chapterNumber) > 21); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "RUT": validReference = !(Integer.parseInt(chapterNumber) > 4); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "1SA": validReference = !(Integer.parseInt(chapterNumber) > 31); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "2SA": validReference = !(Integer.parseInt(chapterNumber) > 24); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "1KI": validReference = !(Integer.parseInt(chapterNumber) > 22); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "2KI": validReference = !(Integer.parseInt(chapterNumber) > 25); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "1CH": validReference = !(Integer.parseInt(chapterNumber) > 29); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "2CH": validReference = !(Integer.parseInt(chapterNumber) > 36); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "EZR": validReference = !(Integer.parseInt(chapterNumber) > 10); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "NEH": validReference = !(Integer.parseInt(chapterNumber) > 13); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "EST": validReference = !(Integer.parseInt(chapterNumber) > 10); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "JOB": validReference = !(Integer.parseInt(chapterNumber) > 42); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "PSA": validReference = !(Integer.parseInt(chapterNumber) > 150); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "PRO": validReference = !(Integer.parseInt(chapterNumber) > 31); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "ECC": validReference = !(Integer.parseInt(chapterNumber) > 12); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "SNG": validReference = !(Integer.parseInt(chapterNumber) > 8); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "ISA": validReference = !(Integer.parseInt(chapterNumber) > 66); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "JER": validReference = !(Integer.parseInt(chapterNumber) > 52); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "LAM": validReference = !(Integer.parseInt(chapterNumber) > 5); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "EZK": validReference = !(Integer.parseInt(chapterNumber) > 48); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "DAN": validReference = !(Integer.parseInt(chapterNumber) > 12); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "HOS": validReference = !(Integer.parseInt(chapterNumber) > 14); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "JOL": validReference = !(Integer.parseInt(chapterNumber) > 3); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "AMO": validReference = !(Integer.parseInt(chapterNumber) > 9); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "OBA": validReference = !(Integer.parseInt(chapterNumber) > 1); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "JON": validReference = !(Integer.parseInt(chapterNumber) > 4); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "MIC": validReference = !(Integer.parseInt(chapterNumber) > 7); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "NAM": validReference = !(Integer.parseInt(chapterNumber) > 3); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "HAB": validReference = !(Integer.parseInt(chapterNumber) > 3); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "ZEP": validReference = !(Integer.parseInt(chapterNumber) > 3); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "HAG": validReference = !(Integer.parseInt(chapterNumber) > 2); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "ZEC": validReference = !(Integer.parseInt(chapterNumber) > 14); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "MAL": validReference = !(Integer.parseInt(chapterNumber) > 4); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "MAT": validReference = !(Integer.parseInt(chapterNumber) > 28); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "MRK": validReference = !(Integer.parseInt(chapterNumber) > 16); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "LUK": validReference = !(Integer.parseInt(chapterNumber) > 24); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "JHN": validReference = !(Integer.parseInt(chapterNumber) > 21); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "ACT": validReference = !(Integer.parseInt(chapterNumber) > 28); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "ROM": validReference = !(Integer.parseInt(chapterNumber) > 16); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "1CO": validReference = !(Integer.parseInt(chapterNumber) > 16); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "2CO": validReference = !(Integer.parseInt(chapterNumber) > 13); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "GAL": validReference = !(Integer.parseInt(chapterNumber) > 6); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "EPH": validReference = !(Integer.parseInt(chapterNumber) > 6); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "PHP": validReference = !(Integer.parseInt(chapterNumber) > 4); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "COL": validReference = !(Integer.parseInt(chapterNumber) > 4); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "1TH": validReference = !(Integer.parseInt(chapterNumber) > 5); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "2TH": validReference = !(Integer.parseInt(chapterNumber) > 3); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "1TI": validReference = !(Integer.parseInt(chapterNumber) > 6); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "2TI": validReference = !(Integer.parseInt(chapterNumber) > 4); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "TIT": validReference = !(Integer.parseInt(chapterNumber) > 3); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "PHM": validReference = !(Integer.parseInt(chapterNumber) > 1); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "HEB": validReference = !(Integer.parseInt(chapterNumber) > 13); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "JAS": validReference = !(Integer.parseInt(chapterNumber) > 5); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "1PE": validReference = !(Integer.parseInt(chapterNumber) > 5); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "2PE": validReference = !(Integer.parseInt(chapterNumber) > 3); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "1JN": validReference = !(Integer.parseInt(chapterNumber) > 5); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "2JN": validReference = !(Integer.parseInt(chapterNumber) > 1); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "3JN": validReference = !(Integer.parseInt(chapterNumber) > 1); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "JUD": validReference = !(Integer.parseInt(chapterNumber) > 1); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				case "REV": validReference = !(Integer.parseInt(chapterNumber) > 22); 
+							invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+				default: validReference = false; break;
+			}
+			
 			if (validReference) {
 				fileName = bookNumber + bookAbbreviation + projectName + ".SFM";
+				
+				String nextChapter = Integer.toString((Integer.parseInt(chapterNumber) + 1));
+				//System.out.println("Next chapter:" + nextChapter);
 				
 				//check if file exists
 				File expectedFile = new File(installPath + projectName + "/" + fileName);
@@ -301,7 +447,14 @@ public class ExportFromParatext {
 							lineNumber += 1;
 							
 							if (currentLine.equals("\\c " + chapterNumber))
-								System.out.println("Found the chapter tag at line " + lineNumber);
+								foundChapter = true;
+							if (currentLine.equals("\\c " + nextChapter))
+								foundChapter = false;
+							if (foundChapter) {
+								if (currentLine.equals("\\v " + beginningVerse)) //doesn't work because the verse is on the same line as the chapter
+									System.out.println(currentLine);
+								
+							}
 							
 							/*
 							for (int i = 0; i < currentLine.length(); i++) {
@@ -322,18 +475,21 @@ public class ExportFromParatext {
 						System.out.println("\nCould not find that file!");
 					}
 				} //end if file exists
+				else {
+					System.out.println("\nCould not find the file for this book of the Bible.");
+				}
 				
 				//print the parsed reference for troubleshooting
-				System.out.println("\nBook name: " + bookName + 
+				/*System.out.println("\nBook name: " + bookName + 
 								 "\nBook abbreviation: " + bookAbbreviation + 
 								 "\nChapter: " + chapterNumber + 
 								 "\nBeginning verse: " + beginningVerse + 
 								 "\nEnding verse: " + endingVerse + 
 								 "\nExpected path: " + expectedFile + 
-								 "\nFile exists? " + fileExists);
+								 "\nFile exists? " + fileExists); */
 			}
 			else
-				System.out.println("Bad reference");
+				System.out.println("Bad reference. " + invalidReason);
 		}
     }
 }
