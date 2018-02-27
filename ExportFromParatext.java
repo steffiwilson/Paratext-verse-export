@@ -450,25 +450,17 @@ public class ExportFromParatext {
 								foundChapter = true;
 							if (currentLine.equals("\\c " + nextChapter))
 								foundChapter = false;
-							if (foundChapter) {
-								if (currentLine.equals("\\v " + beginningVerse)) //doesn't work because the verse is on the same line as the chapter
+							if (foundChapter && !foundVerse) { //todo: add case for multiple verses; add case for verses included in a span in paratext
+								String lineBeginning = "";
+								for (int j = 0; j < beginningVerse.length() + 3 && j < currentLine.length(); j++) {
+									lineBeginning = lineBeginning + currentLine.charAt(j);								
+								}
+								if (lineBeginning.equals("\\v " + beginningVerse)) {
 									System.out.println(currentLine);
-								
+									foundVerse = true;
+									lineBeginning = "";
+								}			
 							}
-							
-							/*
-							for (int i = 0; i < currentLine.length(); i++) {
-								if (foundMarkupTag && !foundChapter) {
-									
-								}
-								else {
-									if (currentLine.charAt(i) == '\')
-										foundMarkupTag = true;
-									else {
-									}	
-								}
-							}
-							*/
 						}// end while scanner has next line
 					}
 					catch (Exception e) {
