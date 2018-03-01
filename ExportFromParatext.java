@@ -63,12 +63,12 @@ public class ExportFromParatext {
             if (endingVerse.length() == 0)
                 endingVerse = beginningVerse;
             
-            validReference = !(bookName == null || chapterNumber == null || beginningVerse == null);
-            if (bookName == null)
+            validReference = !(bookName.length() == 0 || chapterNumber.length() == 0 || beginningVerse.length() == 0);
+            if (bookName.length() == 0)
                 invalidReason += "Unable to identify book. ";
-            if (chapterNumber == null) 
+            if (chapterNumber.length() == 0) 
                 invalidReason += "Unable to identify chapter number. ";
-            if (beginningVerse == null) 
+            if (beginningVerse.length() == 0) 
                 invalidReason += "Unable to identify verse. ";
             
             //map the book name to the abbreviation - these abbreviations and numbering are the Paratext standard
@@ -476,7 +476,7 @@ public class ExportFromParatext {
                                  "\nBeginning verse: " + beginningVerse + 
                                  "\nEnding verse: " + endingVerse + 
                                  "\nExpected path: " + expectedFile + 
-                                 "\nFile exists? " + fileExists); */
+                                 "\nFile exists? " + fileExists); 
             } //end if validReference
             else
                 System.out.println("Bad reference. " + invalidReason);
