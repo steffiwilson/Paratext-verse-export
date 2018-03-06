@@ -437,6 +437,9 @@ public class ExportFromParatext {
                         boolean foundVerse = false;
                         boolean foundMarkupTag = false;
                         String currentTag = "";
+                        boolean tagFound = false;
+                        boolean tagText = "";
+                        String resultText = "";
                         
                         int lineNumber = 0; //for testing
                         
@@ -454,8 +457,26 @@ public class ExportFromParatext {
                                     lineBeginning = lineBeginning + currentLine.charAt(j);                              
                                 }
                                 if (lineBeginning.equals("\\v " + beginningVerse)) {
-                                    System.out.println(currentLine);
                                     foundVerse = true;
+                                    //strip out markup
+                                    for (int j = 0; j < currentLine.length(); j++) {
+                                        if (tagFound && currentLine.charAt(j) != ' ') {
+                                            tagText = tagText + currentLine.charAt(j);
+                                        }
+                                        else if (tagFound && currentLine.charAt(j) == ' ') {
+                                            //check if tag is self-closing (like \v) 
+                                            //or just styling (like \bk ... \bk*) 
+                                            //or surrounds a block to delete (like \x ... \x*)
+                                            
+                                        }
+                                        else if (currentLine.charAt(j) == '\\') {
+                                            tagFound = true;
+                                        }
+                                        else {
+                                            resultText += currentLine.charAt(j);
+                                        }
+                                    }
+                                    //System.out.println(currentLine);
                                     lineBeginning = "";
                                 }           
                             }
