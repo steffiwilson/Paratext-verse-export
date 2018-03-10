@@ -62,14 +62,23 @@ public class ExportFromParatext {
             
             if (endingVerse.length() == 0)
                 endingVerse = beginningVerse;
-            
-            validReference = !(bookName.length() == 0 || chapterNumber.length() == 0 || beginningVerse.length() == 0);
-            if (bookName.length() == 0)
+			
+			if (Integer.parseInt(endingVerse) > Integer.parseInt(beginningVerse)) {
+				validReference = false;
+				invalidReason += "The ending verse is greater than the beginning verse.";
+			}
+            if (bookName.length() == 0) {
+				validReference = false;
                 invalidReason += "Unable to identify book. ";
-            if (chapterNumber.length() == 0) 
+			}
+            if (chapterNumber.length() == 0) {
+				validReference = false;
                 invalidReason += "Unable to identify chapter number. ";
-            if (beginningVerse.length() == 0) 
+			}
+            if (beginningVerse.length() == 0) {
+				validReference = false;
                 invalidReason += "Unable to identify verse. ";
+			}
             
             //map the book name to the abbreviation - these abbreviations and numbering are the Paratext standard
             switch (bookName.toUpperCase()) {
@@ -283,28 +292,61 @@ public class ExportFromParatext {
             } //end abbreviation switch
             
             switch (bookAbbreviation) {
-                case "GEN": validReference = !(Integer.parseInt(chapterNumber) > 50); 
-                            invalidReason += "That chapter does not exist in that book of the Bible. "; break;
-                case "EXO": validReference = !(Integer.parseInt(chapterNumber) > 40); 
-                            invalidReason += "That chapter does not exist in that book of the Bible. "; break;
-                case "LEV": validReference = !(Integer.parseInt(chapterNumber) > 27); 
-                            invalidReason += "That chapter does not exist in that book of the Bible. "; break;
-                case "NUM": validReference = !(Integer.parseInt(chapterNumber) > 36); 
-                            invalidReason += "That chapter does not exist in that book of the Bible. "; break;
-                case "DEU": validReference = !(Integer.parseInt(chapterNumber) > 34); 
-                            invalidReason += "That chapter does not exist in that book of the Bible. "; break;
-                case "JOS": validReference = !(Integer.parseInt(chapterNumber) > 24); 
-                            invalidReason += "That chapter does not exist in that book of the Bible. "; break;
-                case "JDG": validReference = !(Integer.parseInt(chapterNumber) > 21); 
-                            invalidReason += "That chapter does not exist in that book of the Bible. "; break;
-                case "RUT": validReference = !(Integer.parseInt(chapterNumber) > 4); 
-                            invalidReason += "That chapter does not exist in that book of the Bible. "; break;
-                case "1SA": validReference = !(Integer.parseInt(chapterNumber) > 31); 
-                            invalidReason += "That chapter does not exist in that book of the Bible. "; break;
-                case "2SA": validReference = !(Integer.parseInt(chapterNumber) > 24); 
-                            invalidReason += "That chapter does not exist in that book of the Bible. "; break;
-                case "1KI": validReference = !(Integer.parseInt(chapterNumber) > 22); 
-                            invalidReason += "That chapter does not exist in that book of the Bible. "; break;
+                case "GEN": if (Integer.parseInt(chapterNumber) > 50) {
+								validReference = false; 
+								invalidReason += "That chapter does not exist in that book of the Bible. "; 
+								break;
+							}
+                case "EXO": if (Integer.parseInt(chapterNumber) > 40) {
+								validReference = false;
+								invalidReason += "That chapter does not exist in that book of the Bible. "; 
+								break;
+							}
+                case "LEV": if (Integer.parseInt(chapterNumber) > 27) {
+								validReference = false;
+								invalidReason += "That chapter does not exist in that book of the Bible. "; 
+								break;
+							}
+                case "NUM": if (Integer.parseInt(chapterNumber) > 36) {
+								validReference = false;
+								invalidReason += "That chapter does not exist in that book of the Bible. "; 
+								break;
+							}
+                case "DEU": if (Integer.parseInt(chapterNumber) > 34) {
+								validReference = false;
+								invalidReason += "That chapter does not exist in that book of the Bible. "; 
+								break;
+							}
+                case "JOS": if (Integer.parseInt(chapterNumber) > 24) {
+								validReference = false;
+								invalidReason += "That chapter does not exist in that book of the Bible. "; 
+								break;
+							}
+                case "JDG": if (Integer.parseInt(chapterNumber) > 21) {
+								validReference = false;
+								invalidReason += "That chapter does not exist in that book of the Bible. "; 
+								break;
+							}
+                case "RUT": if (Integer.parseInt(chapterNumber) > 4) {
+								validReference = false;
+								invalidReason += "That chapter does not exist in that book of the Bible. "; 
+								break;
+							}
+                case "1SA": if (Integer.parseInt(chapterNumber) > 31) {
+								validReference = false;
+								invalidReason += "That chapter does not exist in that book of the Bible. "; 
+								break;
+							}
+                case "2SA": if (Integer.parseInt(chapterNumber) > 24) {
+								validReference = false;
+								invalidReason += "That chapter does not exist in that book of the Bible. "; 
+								break;
+							}
+                case "1KI": if (Integer.parseInt(chapterNumber) > 22) {
+								validReference = false;
+								invalidReason += "That chapter does not exist in that book of the Bible. "; 
+								break;
+							}//TODO: Finish fixing all these :(
                 case "2KI": validReference = !(Integer.parseInt(chapterNumber) > 25); 
                             invalidReason += "That chapter does not exist in that book of the Bible. "; break;
                 case "1CH": validReference = !(Integer.parseInt(chapterNumber) > 29); 
@@ -434,52 +476,77 @@ public class ExportFromParatext {
                         Scanner scanner = new Scanner(expectedFile, "UTF-8");
                         String currentLine;
                         boolean foundChapter = false;
-                        boolean foundVerse = false;
+                        boolean foundStartVerse = false;
+						boolean foundEndVerse = false;
                         boolean foundMarkupTag = false;
                         String currentTag = "";
                         boolean tagFound = false;
-                        boolean tagText = "";
+                        String tagText = "";
                         String resultText = "";
                         
                         int lineNumber = 0; //for testing
                         
                         while (scanner.hasNextLine()) {
                             currentLine = scanner.nextLine();
+							boolean currentLinePrinted = false;
                             lineNumber += 1;
                             
                             if (currentLine.equals("\\c " + chapterNumber))
                                 foundChapter = true;
                             if (currentLine.equals("\\c " + nextChapter))
                                 foundChapter = false;
-                            if (foundChapter && !foundVerse) { //todo: add case for multiple verses; add case for verses included in a span in paratext
+                            if (foundChapter && !foundEndVerse) { //todo: add case for multiple verses; add case for verses included in a span in paratext
                                 String lineBeginning = "";
-                                for (int j = 0; j < beginningVerse.length() + 3 && j < currentLine.length(); j++) {
+                                for (int j = 0; j < beginningVerse.length() + 5 && j < currentLine.length(); j++) {
                                     lineBeginning = lineBeginning + currentLine.charAt(j);                              
-                                }
-                                if (lineBeginning.equals("\\v " + beginningVerse)) {
-                                    foundVerse = true;
-                                    //strip out markup
-                                    for (int j = 0; j < currentLine.length(); j++) {
-                                        if (tagFound && currentLine.charAt(j) != ' ') {
-                                            tagText = tagText + currentLine.charAt(j);
-                                        }
-                                        else if (tagFound && currentLine.charAt(j) == ' ') {
-                                            //check if tag is self-closing (like \v) 
-                                            //or just styling (like \bk ... \bk*) 
-                                            //or surrounds a block to delete (like \x ... \x*)
-                                            
-                                        }
-                                        else if (currentLine.charAt(j) == '\\') {
-                                            tagFound = true;
-                                        }
-                                        else {
-                                            resultText += currentLine.charAt(j);
-                                        }
-                                    }
-                                    //System.out.println(currentLine);
-                                    lineBeginning = "";
-                                }           
+                                
+									if (lineBeginning.equals("\\v " + beginningVerse)) {
+								 
+										//strip out markup
+										/*for (int j = 0; j < currentLine.length(); j++) {
+											if (tagFound && currentLine.charAt(j) != ' ') {
+												tagText = tagText + currentLine.charAt(j);
+											}
+											else if (tagFound && currentLine.charAt(j) == ' ') {
+												//check if tag is self-closing (like \v) 
+												//or just styling (like \bk ... \bk*) 
+												//or surrounds a block to delete (like \x ... \x*)
+												
+											}
+											else if (currentLine.charAt(j) == '\\') {
+												tagFound = true;
+											}
+											else {
+												resultText += currentLine.charAt(j);
+											}
+										} */
+										if (!currentLinePrinted) {
+											System.out.println(currentLine);
+											currentLinePrinted = true;
+										}
+										foundStartVerse = true;
+										lineBeginning = "";
+										if (beginningVerse == endingVerse) {
+											foundEndVerse = true;
+										}
+									}
+									else if (lineBeginning.equals("\\v " + endingVerse)) {
+										foundEndVerse = true;
+										if (!currentLinePrinted) {
+											System.out.println(currentLine);
+											currentLinePrinted = true;
+										}
+										currentLinePrinted = true;
+									}
+									else if (foundStartVerse && !foundEndVerse) {
+										if (!currentLinePrinted) {
+											System.out.println(currentLine);
+											currentLinePrinted = true;
+										}
+									}
+								}
                             }
+							
                         }// end while scanner has next line
                     }
                     catch (Exception e) {
@@ -491,7 +558,7 @@ public class ExportFromParatext {
                 }
                 
                 //print the parsed reference for troubleshooting
-                /*System.out.println("\nBook name: " + bookName + 
+                System.out.println("\nBook name: " + bookName + 
                                  "\nBook abbreviation: " + bookAbbreviation + 
                                  "\nChapter: " + chapterNumber + 
                                  "\nBeginning verse: " + beginningVerse + 
