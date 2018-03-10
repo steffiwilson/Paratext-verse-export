@@ -331,6 +331,9 @@ public class ExportFromParatext {
                                 for (int j = 0; j < beginningVerse.length() + 5 && j < currentLine.length(); j++) {
                                     lineBeginning = lineBeginning + currentLine.charAt(j);                              
                                 
+									//todo: make a function to strip markup from the line; use 
+									//helloWorld = helloWorld.replace("\\v ",""); etc to remove tags 
+									
 									if (lineBeginning.equals("\\v " + beginningVerse)) {
 								 
 										//strip out markup
